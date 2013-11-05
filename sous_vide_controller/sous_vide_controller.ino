@@ -1,6 +1,8 @@
 #include <Wire.h>
 #include <LCD.h>
 #include <LiquidCrystal_I2C.h>
+#include<stdlib.h>
+
 
 // SETUP LCD
 //========================================
@@ -14,86 +16,100 @@
 #define D6_pin 6
 #define D7_pin 7
 
+#define stateReferencing 0
+#define stateUnreferenced 1
+#define stateNormOperation 2
+
 LiquidCrystal_I2C lcd(I2C_ADDR,En_pin,Rw_pin,Rs_pin,D4_pin,D5_pin,D6_pin,D7_pin);
 //========================================
 
-const int buttonPin = 2;
-const int refPin = A0;
-const int tempPin1 = A1
+const int buttonPinReference = 2;
+long lastDebounceTimeReference = 0;
+int buttonStateReference;  
+int lastButtonStateReference = LOW; 
 
-bool displayState = true;
-bool referencing = false;
+const int vPinRef = A0;
+const int vPin1Temp = A1;
+
+int currentState = stateUnreferenced;
+int nextState = stateUnreferenced;
 int refVoltage = -1;
 int refTemp = -1;
 
-long lastDebounceTime = 0;
 long debounceDelay = 50;
-int buttonState;  
-int lastButtonState = HIGH;   
 
 void setup()
 {
-  pinMode(buttonPin, INPUT);
+  pinMode(buttonPinReference, INPUT);
   lcd.begin (20,4,LCD_5x8DOTS);
   lcd.setBacklightPin(BACKLIGHT_PIN,POSITIVE);
+  Serial.begin(9600);
 }
 
-void loop()
+void activateState(int state)
 {
- 
-  int buttonReading = digitalRead(buttonPin);
+  String blankEnding = "     ";
+  switch(state)
+  {
+    case stateReferencing:
+    {
+      String baseText = "Referencing: ";
+      
+      int sensorValue = analogRead(vPinRef);
+      float voltage = sensorValue * (5.0 / 1023.0);
+      lcd.print(baseText+sensorValue+blankEnding );
+      break;
+    }
+    case stateUnreferenced:
+      lcd.print("please set reference temp");
+      break;
+  }
+}
 
-  if (reading != lastButtonState) {
-    lastDebounceTime = millis();
+boolean getButtonPush(int buttonPin,long* lastDebounceTime,int* buttonState,int* lastButtonState)
+{  
+  int buttonReading = !digitalRead(buttonPin);
+  int output = false;
+
+  if (buttonReading != *lastButtonState) {
+    *lastDebounceTime = millis();
   } 
   
-  if ((millis() - lastDebounceTime) > debounceDelay) {
-    if (reading != buttonState) {
-      if(reading==HIGH)
+  if ((millis() - *lastDebounceTime) > debounceDelay) 
+  {
+    if (buttonReading != *buttonState) 
+    {
+      *buttonState = buttonReading;
+      
+      if (*buttonState == HIGH) 
       {
-        referencing=false
-      }
-      else
-      {
-        referencing=true
-      }
-      buttonState = reading;
-
-      if (displayState == HIGH) {
-        ledState = !ledState;
+        output = true;
       }
     }
   }
+  *lastButtonState = buttonReading;
   
-  lastButtonState = reading;
+  return output;
+}
+void loop()
+{
+  lcd.setBacklight(HIGH);
+  lcd.home();  
   
-  
-  
-  //Turn the display backlight on or off
-  //========================================
-  if(displayState==true)
-  {
-    lcd.setBacklight(HIGH);
-  }
-  else
-  {
-    lcd.setBacklight(LOW);
-  }    
-  //========================================
-  lcd.home ();
-  
-  if(refTemp==-1)
-  {
-    lcd.print("Please set the reference temperature");
-  }
-  else
-  {
-    lcd.print(refTemp);
-  }
+  boolean refButtonClicked = getButtonPush(buttonPinReference,&lastDebounceTimeReference,&buttonStateReference,&lastButtonStateReference);
 
-  int buttonVal = analogRead(buttonPin);
-  if()
-  int sensorValue = analogRead(refPin);
-  float voltage = sensorValue * (5.0 / 1023.0);
+  if(refButtonClicked)
+  {
+    nextState = (currentState!=stateReferencing)?stateReferencing:stateUnreferenced;
+  }
+  
+  if(nextState != currentState)
+  {
+    lcd.clear();
+    currentState = nextState; 
+  } 
+
+  activateState(currentState);
+
 
 }

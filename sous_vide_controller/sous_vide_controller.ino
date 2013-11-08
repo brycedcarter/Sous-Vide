@@ -16,12 +16,29 @@
 #define D6_pin 6
 #define D7_pin 7
 
-#define stateReferencing 0
-#define stateUnreferenced 1
-#define stateNormOperation 2
+#define STATEstartup 0
+#define STATEunreferenced 1
+#define STATEstandby 2
+#define STATEactiveCool 4
+#define STATEactiveHeat 5
+#define STATEactiveStirCool 6
+#define STATEactiveStirHeat 7
+#define STATEfault 8
+#define STATEtargetting 9
 
 LiquidCrystal_I2C lcd(I2C_ADDR,En_pin,Rw_pin,Rs_pin,D4_pin,D5_pin,D6_pin,D7_pin);
 //========================================
+
+const int maxTemp = 250;
+const int minTemp = 50;
+
+
+//FLAGS
+bool FLAGtargetted = 0;
+bool FLAGreferenced = 0;
+bool FLAGactiveSwitch = 0;
+bool FLAGtargettingSwitch = 0;
+bool FLAGreferencingSwitch = 0;
 
 const int buttonPinReference = 2;
 long lastDebounceTimeReference = 0;
@@ -56,12 +73,12 @@ void activateState(int state)
       String baseText = "Referencing: ";
       
       int sensorValue = analogRead(vPinRef);
-      float voltage = sensorValue * (5.0 / 1023.0);
-      lcd.print(baseText+sensorValue+blankEnding );
+      int refTemp = sensorValue * ((maxTemp-minTemp) / 1023.0)+minTemp;
+      lcd.print(baseText+refTemp+blankEnding );
       break;
     }
     case stateUnreferenced:
-      lcd.print("please set reference temp");
+      lcd.print("please set reference tem");
       break;
   }
 }

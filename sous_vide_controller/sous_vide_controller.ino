@@ -15,52 +15,142 @@
 #define D5_pin 5
 #define D6_pin 6
 #define D7_pin 7
-
-#define STATEstartup 0
-#define STATEunreferenced 1
-#define STATEstandby 2
-#define STATEactiveCool 4
-#define STATEactiveHeat 5
-#define STATEactiveStirCool 6
-#define STATEactiveStirHeat 7
-#define STATEfault 8
-#define STATEtargetting 9
-
 LiquidCrystal_I2C lcd(I2C_ADDR,En_pin,Rw_pin,Rs_pin,D4_pin,D5_pin,D6_pin,D7_pin);
 //========================================
 
+
+// Define states
+//========================================
+#define STATEstartup 0
+#define STATEstandby 1
+#define STATEactive 2
+#define STATEfault 3
+//========================================
+
+// Setup Constants
+//========================================
 const int maxTemp = 250;
 const int minTemp = 50;
+//========================================
+
+
+// Define pins
+//=======================================
+
+//Input Pins
+const int vPinTarget = A0;
+const int vPinTemp1 = A1;
+const int vPinTemp2 = A2;
+const int vPinTemp3 = A3;
+const int vPinTemp4 = A4;
+const int inpSwitchActive = 53;
+
+const array inputPins = [vPinTarget,vPinTemp1,vPinTemp2,vPinTemp3,vPinTemp4,
+						 inpSwitchActive];
+
+
+//Output pins
+const int outPinMotor = 51;
+const int outPinHeater = 52;
+const array outputPins = [outPinMotor,outPinHeater];
+
+//=======================================
 
 
 //FLAGS
-bool FLAGtargetted = 0;
-bool FLAGreferenced = 0;
-bool FLAGactiveSwitch = 0;
-bool FLAGtargettingSwitch = 0;
-bool FLAGreferencingSwitch = 0;
-
-const int buttonPinReference = 2;
-long lastDebounceTimeReference = 0;
-int buttonStateReference;  
-int lastButtonStateReference = LOW; 
-
-const int vPinRef = A0;
-const int vPin1Temp = A1;
+//=======================================
+int INITIALIZED = false; 
+//=======================================
 
 int currentState = stateUnreferenced;
-int nextState = stateUnreferenced;
-int refVoltage = -1;
-int refTemp = -1;
-
-long debounceDelay = 50;
+int targetVoltage = -1;
+int targetTemp = -1;
 
 void setup()
 {
-  pinMode(buttonPinReference, INPUT);
-  lcd.begin (20,4,LCD_5x8DOTS);
-  lcd.setBacklightPin(BACKLIGHT_PIN,POSITIVE);
-  Serial.begin(9600);
+	//Setup pins
+	for (i=0;i++;i<inputPins.length)
+	{
+		int pin = inputPins[i];
+		pinMode(pin, INPUT);
+	}
+	for (i=0;i++;i<outputPins.length)
+	{
+		int pin = inputPins[i];
+		pinMode(pin, OUTPUT);
+	}
+  
+	//Setup LCD
+	lcd.begin (20,4,LCD_5x8DOTS);
+	lcd.setBacklightPin(BACKLIGHT_PIN,POSITIVE);
+
+	//Seup Serial (should not be used in final... just for debugging)
+	Serial.begin(9600);
+}
+
+void activeStateHandler()
+{
+
+}
+
+void standbyStateHandler()
+{
+
+}
+
+void startupStateHandler()
+{	
+	lcd.clear();
+	currentState = STATEstandby;
+}
+
+void faultStateHandler()
+{
+
+}
+
+int determineState()
+{
+	if (currentState!=STATEfault)
+	{
+		if (INITIALIZED)
+		{
+			activeSwitchState = digitalRead(inpSwitchActive);
+			if (activeSwitchState == HIGH)
+			{
+				return STATEactive;
+			}
+			else
+			{
+				return STATEstandby
+			}
+		}
+		else
+		{
+			return STATEstartup;
+		}
+	}
+	else
+	{
+		return STATEfault;
+	}
+}
+
+void loop()
+{
+	lcd.setBacklight(HIGH);
+
+	switch (determineState())
+	{
+		case STATEstartup: 
+			startupStateHandler();
+		case STATEstandby:
+			standbyStateHandler();
+		case STATEactive:
+			activeStateHandler();
+		case STATEfault:
+			faultStateHandler();
+	}
 }
 
 void activateState(int state)
@@ -107,26 +197,4 @@ boolean getButtonPush(int buttonPin,long* lastDebounceTime,int* buttonState,int*
   *lastButtonState = buttonReading;
   
   return output;
-}
-void loop()
-{
-  lcd.setBacklight(HIGH);
-  lcd.home();  
-  
-  boolean refButtonClicked = getButtonPush(buttonPinReference,&lastDebounceTimeReference,&buttonStateReference,&lastButtonStateReference);
 
-  if(refButtonClicked)
-  {
-    nextState = (currentState!=stateReferencing)?stateReferencing:stateUnreferenced;
-  }
-  
-  if(nextState != currentState)
-  {
-    lcd.clear();
-    currentState = nextState; 
-  } 
-
-  activateState(currentState);
-
-
-}

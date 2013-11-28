@@ -1,0 +1,12 @@
+﻿Build started 11/28/2013 12:19:59 AM.
+     1>Project "C:\Users\Bryce Carter\Dropbox\Projects\Sous Vide\Code\Sous-Vide\sous_vide_controller\sous_vide_controller.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\sous_vide_controller.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       FinalizeBuildStatus:
+         Deleting file "Debug\sous_vide_controller.unsuccessfulbuild".
+         Touching "Debug\sous_vide_controller.lastbuildstate".
+     1>Done Building Project "C:\Users\Bryce Carter\Dropbox\Projects\Sous Vide\Code\Sous-Vide\sous_vide_controller\sous_vide_controller.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.31

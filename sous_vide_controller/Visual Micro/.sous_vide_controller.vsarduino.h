@@ -3,7 +3,6 @@
 //Board = Arduino Mega (ATmega1280)
 #define __AVR_ATmega1280__
 #define 
-#define _VMDEBUG 1
 #define ARDUINO 105
 #define ARDUINO_MAIN
 #define __AVR__
@@ -31,11 +30,15 @@ typedef unsigned char byte;
 extern "C" void __cxa_pure_virtual() {;}
 
 //
-void activateState(int state);
-boolean getButtonPush(int buttonPin,long* lastDebounceTime,int* buttonState,int* lastButtonState);
+double Thermister(int RawADC);
+void activeStateHandler();
+void standbyStateHandler();
+void startupStateHandler();
+void faultStateHandler();
+int determineState();
 //
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\variants\mega\pins_arduino.h" 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\arduino.h"
-#include "C:\Users\Bryce Carter\Desktop\Sous-Vide\sous_vide_controller\sous_vide_controller.ino"
+#include "C:\Users\Bryce Carter\Dropbox\Projects\Sous Vide\Code\Sous-Vide\sous_vide_controller\sous_vide_controller.ino"
 #endif

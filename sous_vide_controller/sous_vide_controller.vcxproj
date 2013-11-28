@@ -41,6 +41,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\variants\mega;C:\Program Files (x86)\Arduino\libraries\Wire;C:\Program Files (x86)\Arduino\libraries\Wire\utility;C:\Program Files (x86)\Arduino\libraries\LiquidCrystal;C:\Program Files (x86)\Arduino\libraries\LiquidCrystal\utility;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\avr\;c:\program files (x86)\arduino\hardware\tools\avr\avr\;c:\program files (x86)\arduino\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>C:\Users\Bryce Carter\Dropbox\Projects\Sous Vide\Code\Sous-Vide\sous_vide_controller\Visual Micro\.sous_vide_controller.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
+      <PreprocessorDefinitions>__AVR_ATmega1280__;ARDUINO=105;ARDUINO_MAIN;__AVR__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -60,8 +64,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="sous_vide_controller.ino">
+      <FileType>CppCode</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Visual Micro\.sous_vide_controller.vsarduino.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties arduino.board.name="mega" arduino.board.desc="Arduino Mega (ATmega1280)" arduino.board.property_bag="name=Arduino Mega (ATmega1280)&#xD;&#xA;upload.protocol=arduino&#xD;&#xA;upload.maximum_size=126976&#xD;&#xA;upload.speed=57600&#xD;&#xA;bootloader.low_fuses=0xFF&#xD;&#xA;bootloader.high_fuses=0xDA&#xD;&#xA;bootloader.extended_fuses=0xF5&#xD;&#xA;bootloader.path=atmega&#xD;&#xA;bootloader.file=ATmegaBOOT_168_atmega1280.hex&#xD;&#xA;bootloader.unlock_bits=0x3F&#xD;&#xA;bootloader.lock_bits=0x0F&#xD;&#xA;build.mcu=atmega1280&#xD;&#xA;build.f_cpu=16000000L&#xD;&#xA;build.core=arduino&#xD;&#xA;build.variant=mega&#xD;&#xA;runtime.ide.path=C:\Program Files (x86)\Arduino&#xD;&#xA;build.system.path=C:\Program Files (x86)\Arduino\hardware\arduino\system&#xD;&#xA;runtime.ide.version=105&#xD;&#xA;originalid=mega&#xD;&#xA;vm.core.include=arduino.h&#xD;&#xA;vm.boardsource.path=C:\Program Files (x86)\Arduino\hardware\arduino&#xD;&#xA;vm.platformname.name=avr&#xD;&#xA;build.arch=AVR&#xD;&#xA;ide.hint=Arduino 0023 and 1.0.x Ide&#xD;&#xA;ide.location.key=Arduino&#xD;&#xA;ide.location.ide.winreg=Arduino 1.0.x Application&#xD;&#xA;ide.location.sketchbook.winreg=Arduino 1.0.x Sketchbook&#xD;&#xA;ide.location.sketchbook.preferences=sketchbook.path&#xD;&#xA;ide.location.sketchbook.default=%MYDOCUMENTS%\arduino&#xD;&#xA;ide.location.preferences=%VM_APPDATA_ROAMING%\arduino\preferences.txt&#xD;&#xA;ide.default.package=arduino&#xD;&#xA;ide.default.platform=avr&#xD;&#xA;ide.multiplatform=true&#xD;&#xA;ide.includes=arduino.h&#xD;&#xA;ide.platformswithoutpackage=true&#xD;&#xA;ide.sketchfolder.platforms.exclude=avr&#xD;&#xA;ide.includes.fallback=wprogram.h&#xD;&#xA;ide.extension=ino&#xD;&#xA;ide.extension.fallback=pde&#xD;&#xA;ide.versionLTEQ=149&#xD;&#xA;ide.exe=arduino.exe&#xD;&#xA;ide.hosts=atmel&#xD;&#xA;ide.url=http://arduino.cc/en/Main/Software&#xD;&#xA;vm.debug=true&#xD;&#xA;software=ARDUINO&#xD;&#xA;ide.appid=arduino10x&#xD;&#xA;location.sketchbook=C:\Users\Bryce Carter\Documents\Arduino&#xD;&#xA;" arduino.build.mcu="atmega1280" arduino.build.f_cpu="16000000L" arduino.build.core="arduino" arduino.upload.protocol="arduino" arduino.upload.speed="57600" arduino.upload.maximum_size="126976" visualmicro.application.name="arduino10x" visualmicro.package.name="arduino" visualmicro.platform.name="avr" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>
